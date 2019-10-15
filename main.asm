@@ -58,17 +58,17 @@ Reset:
     TXA
     ClearMem:
         ; Store contents of A into address space $0000 offset by x.
-        STA $0000, x ; Covers all memory from $0000 - $00FF
-        STA $0100, x
-        STA $0300, x ; Skip $0200-$02FF as thus will be used for sprite information.
-        STA $0400, x
-        STA $0500, x
-        STA $0600, x
-        STA $0700, x
+        STA $0000, X ; Covers all memory from $0000 - $00FF
+        STA $0100, X
+        STA $0300, X ; Skip $0200-$02FF as thus will be used for sprite information.
+        STA $0400, X
+        STA $0500, X
+        STA $0600, X
+        STA $0700, X
 
         ; Initialise sprite area to #$FF
         LDA #$FF
-        STA $0200, x
+        STA $0200, X
         LDA #$00
 
         ; Increment X by one.
@@ -78,8 +78,9 @@ Reset:
         BNE ClearMem
 
     ; Wait for VBLANK again before updating sprites.
-    BIT $2002
-    BPL :-
+    :
+        BIT $2002
+        BPL :-
 
     ; Indicate to PPU where the sprite information is stored.
     ; Since the sprite info is always 256 bytes, we only need to specify the high address byte.
@@ -134,6 +135,7 @@ Reset:
      ; Enable sprites and backgrounds for leftmost 8 pixels.
      ; Enable sprites and backgrounds in general.
      LDA #%00011110
+     STA $2001
 
     ; Ensures that code does not pass this point. As everything else will be handled in the NMI.
     ; Infinite loop
